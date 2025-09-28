@@ -1,6 +1,10 @@
-const Home = () => {
+import { ItensListRow } from "../itenslistrow";
+
+const Home = () => { 
   return (
-    <div></div>
+    <main>
+      <ItensListRow />
+    </main>
   );
 };
 
