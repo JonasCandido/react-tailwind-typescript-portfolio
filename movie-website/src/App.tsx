@@ -1,8 +1,12 @@
 import { Home } from "./home";
+import { Header } from "./header";
 
 const App = () => {
   return (
-    <Home />
+    <>
+      <Header />
+      <Home />
+    </>
   );
 };
 

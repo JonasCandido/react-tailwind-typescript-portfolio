@@ -1,6 +1,6 @@
 const Home = () => {
   return (
-    "AAAAAA"
+    <div></div>
   );
 };
 
