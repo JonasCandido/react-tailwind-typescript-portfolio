@@ -1,7 +1,9 @@
-function App() {
+import { Home } from "./home";
+
+const App = () => {
   return (
-    <h1>Site in construction</h1>
+    <Home />
   );
 };
 
-export default App
+export default App;
