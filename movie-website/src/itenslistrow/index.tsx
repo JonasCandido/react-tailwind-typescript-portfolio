@@ -71,9 +71,11 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
     <article className="my-10 ml-10">
       <h2 className="text-3xl my-5">{row_title}</h2>
       <Swiper
-        spaceBetween={10}
-        slidesPerView={7}
         breakpoints={{
+          0: {
+            slidesPerView: 2,
+            spaceBetween: 10,
+          },
           640: {
             slidesPerView: 3,
             spaceBetween: 5,
