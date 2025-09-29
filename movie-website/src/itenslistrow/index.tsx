@@ -68,7 +68,7 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
   }, []);
   
   return (
-    <article className="my-10 ml-10">
+    <article className="my-5 ml-5">
       <h2 className="text-3xl my-5">{row_title}</h2>
       <Swiper
         breakpoints={{
