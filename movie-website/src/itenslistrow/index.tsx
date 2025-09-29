@@ -57,7 +57,6 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
 
     axios.get(url_to_fetch)
       .then((result) => {
-      console.log(result.data);
       dispatchMovies({
         type: moviesFetchSuccess,
         payload: result.data.results,
@@ -76,15 +75,15 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
         slidesPerView={7}
         breakpoints={{
           640: {
-            slidesPerView: 3, // até 640px de largura (mobile), mostra 2 slides
+            slidesPerView: 3,
             spaceBetween: 5,
           },
           768: {
-            slidesPerView: 4, // tablets
+            slidesPerView: 4,
             spaceBetween: 10,
           },
           1024: {
-            slidesPerView: 7, // desktop menor
+            slidesPerView: 7,
             spaceBetween: 10,
           },
         }}
@@ -107,10 +106,10 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
         ))}
 
 
-        <button className="custom-prev absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity z-50">
+        <button className="custom-prev absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity z-50" aria-label="prevButton">
           <ChevronLeftIcon className="w-8 h-8" />
         </button>
-        <button className="custom-next absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity z-50">
+        <button className="custom-next absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity z-50" aria-label="prevButton">
           <ChevronRightIcon className="w-8 h-8" />
         </button>
       </Swiper>
