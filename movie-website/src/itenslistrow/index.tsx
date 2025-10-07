@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import axios from 'axios';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -16,6 +16,8 @@ interface Movie {
   id: number;
   title: string;
   poster_path: string;
+  overview: string;
+  release_date: string;
 };
 
 interface MoviesState {
@@ -50,6 +52,8 @@ const moviesReducer = (state: MoviesState, action: MoviesAction) => {
 const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
 
   const [movies, dispatchMovies] = useReducer(moviesReducer,{data:[],isLoading:false,isError:false});
+  const [hoveredMovie, setHoveredMovie] = useState<number | null>(null);
+
   const url_to_fetch = `${url}${genre_id}&api_key=${api_key}`;
 
   useEffect(() => {
@@ -97,13 +101,32 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
         className="group relative"
       >
         {movies.data.map((movie: Movie) => (
-          <SwiperSlide key={movie.id}>
-            <img
-              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-              alt={movie.title}
-              className="rounded-lg"
-            />
-            <p className="text-lg">{movie.title}</p>
+          <SwiperSlide key={movie.id} className="relative">
+            <div
+              className="overflow-hidden rounded-lg cursor-pointer relative"
+              onMouseEnter={() => setHoveredMovie(movie.id)}
+              onMouseLeave={() => setHoveredMovie(null)}
+            >
+              <img
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={movie.title}
+                className={`w-full h-full object-cover transition-transform duration-300 transform ${
+                  hoveredMovie === movie.id ? "scale-110" : ""
+                }`}
+              />
+
+              <div
+                className={`absolute inset-0 bg-black/70 text-white transition-opacity duration-300 p-4 flex flex-col justify-end ${
+                  hoveredMovie === movie.id ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <h3 className="text-lg font-bold">{movie.title}</h3>
+                <p className="text-sm mt-1">Release: {movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}</p>
+                <p className="text-sm mt-1 line-clamp-3">
+                  {movie.overview ? movie.overview : "No description available."}
+                </p>
+              </div>
+            </div>
           </SwiperSlide>
         ))}
 
