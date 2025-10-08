@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
+import { Link } from "react-router";
 import axios from 'axios';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -107,25 +108,25 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
               onMouseEnter={() => setHoveredMovie(movie.id)}
               onMouseLeave={() => setHoveredMovie(null)}
             >
-              <img
-                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                alt={movie.title}
-                className={`w-full h-full object-cover transition-transform duration-300 transform ${
-                  hoveredMovie === movie.id ? "scale-110" : ""
-                }`}
-              />
+                    <Link to="/iteminfo" >
+                        <img
+                            src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                            alt={movie.title}
+                            className={`w-full h-full object-cover transition-transform duration-300 transform ${hoveredMovie === movie.id ? "scale-110" : ""
+                                }`}
+                        />
 
-              <div
-                className={`absolute inset-0 bg-black/70 text-white transition-opacity duration-300 p-4 flex flex-col justify-end ${
-                  hoveredMovie === movie.id ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <h3 className="text-lg font-bold">{movie.title}</h3>
-                <p className="text-sm mt-1">Release: {movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}</p>
-                <p className="text-sm mt-1 line-clamp-3">
-                  {movie.overview ? movie.overview : "No description available."}
-                </p>
-              </div>
+                        <div
+                            className={`absolute inset-0 bg-black/70 text-white transition-opacity duration-300 p-4 flex flex-col justify-end ${hoveredMovie === movie.id ? "opacity-100" : "opacity-0"
+                                }`}
+                        >
+                            <h3 className="text-lg font-bold">{movie.title}</h3>
+                            <p className="text-sm mt-1">Release: {movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}</p>
+                            <p className="text-sm mt-1 line-clamp-3">
+                                {movie.overview ? movie.overview : "No description available."}
+                            </p>
+                        </div>
+                    </Link>
             </div>
           </SwiperSlide>
         ))}

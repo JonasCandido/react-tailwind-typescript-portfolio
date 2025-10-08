@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 
-body {
+body, div > a {
     background-color: #DED3CA;
     font-family: "Ubuntu", sans-serif;
     font-weight: 400;
