@@ -1,7 +1,21 @@
 import axios from 'axios';
+import { useReducer, useEffect } from "react";
 import { useParams } from "react-router";
 
-const BASE_QUERY = ' https://api.themoviedb.org/3/movie/';
+interface ItemInfoState {
+  data: any[];
+  isLoading: boolean;
+  isError: boolean;
+};
+
+
+interface ItemInfoAction {
+  type: string;
+  payload?: any;
+};
+
+const BASE_QUERY = 'https://api.themoviedb.org/3/movie/';
+const api_key = "b6fc758812b079a8170bcb081bb7da04";
 
 const detailsFetchInit = 'DETAILS_FETCH_INIT';
 const detailsFetchSuccess = 'DETAILS_FETCH_SUCCESS';
@@ -15,7 +29,7 @@ const videosFetchInit = 'VIDEOS_FETCH_INIT';
 const videosFetchSuccess = 'VIDEOS_FETCH_SUCCESS';                                                                               
 const videosFetchFailure = 'VIDEOS_FETCH_SUCCESS';                                                                                    
 
-const detailsReducer = (state,action) => {
+const detailsReducer = (state: ItemInfoState,action: ItemInfoAction) => {
     switch(action.type){
         case detailsFetchInit:
             return {...state,isLoading:true,isError:false,};
@@ -27,7 +41,7 @@ const detailsReducer = (state,action) => {
     };
 };
 
-const creditsReducer = (state,action) => {
+const creditsReducer = (state: ItemInfoState,action: ItemInfoAction) => {
     switch(action.type){
         case creditsFetchInit:
             return {...state,isLoading:true,isError:false,};
@@ -39,7 +53,7 @@ const creditsReducer = (state,action) => {
     };
 };
 
-const videosReducer = (state,action) => {
+const videosReducer = (state: ItemInfoState,action: ItemInfoAction) => {
     switch(action.type){
         case videosFetchInit:
             return {...state,isLoading:true,isError:false,};
@@ -53,14 +67,23 @@ const videosReducer = (state,action) => {
 
 const ItemInfo = () => {
   const { itemId } = useParams();
-  const [details, dispatchDetails] = React.useReducer(detailsReducer, {data:"", isLoading:false,isError:false});
-  const [videos, dispatchVideos] = React.useReducer(videosReducer, {data:"", isLoading:false,isError:false});
+  const [details, dispatchDetails] = useReducer(detailsReducer, {data:"", isLoading:false,isError:false});
+  const [videos, dispatchVideos] = useReducer(videosReducer, {data:"", isLoading:false,isError:false});
+
+  useEffect(() => {
+    dispatchDetails({type:detailsFetchInit})
+    axios.get(`${BASE_QUERY}${itemId}?api_key=${api_key}`).then(result => {
+      console.log(result);
+      dispatchDetails({type:detailsFetchSuccess, payload:result.data.data,})
+    })
+      .catch(() => dispatchDetails({type: detailsFetchFailure}))
+  },[itemId])
   
   return ( "AAAAAA" );
 };
 
 const Credits = () => {
-  
+  const [credits, dispatchCredits] = useReducer(creditsReducer, {data:"", isLoading:false,isError:false});
 };
 
 export { ItemInfo };
