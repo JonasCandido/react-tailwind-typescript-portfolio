@@ -74,12 +74,18 @@ const ItemInfo = () => {
     dispatchDetails({type:detailsFetchInit})
     axios.get(`${BASE_QUERY}${itemId}?api_key=${api_key}`).then(result => {
       console.log(result);
-      dispatchDetails({type:detailsFetchSuccess, payload:result.data.data,})
+      dispatchDetails({type:detailsFetchSuccess, payload:result.data,})
     })
       .catch(() => dispatchDetails({type: detailsFetchFailure}))
   },[itemId])
   
-  return ( "AAAAAA" );
+  return (
+      <main>
+          <section>
+              {details.data.overview}
+          </section>
+      </main>
+  );
 };
 
 const Credits = () => {
