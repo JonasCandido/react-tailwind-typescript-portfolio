@@ -82,7 +82,13 @@ const ItemInfo = () => {
   return (
       <main>
           <section>
-              {details.data.overview}
+              <article>
+                  <h2>{details.data.title}</h2>
+                  <title>{details.data.title} | JWMovies</title>
+                  <meta name="description" content={details.data.overview} />
+                  <meta property="og:title" content={details.data.title + " | JWMovies"} />
+                  <meta property="og:description" content={details.data.overview} />
+              </article>
           </section>
       </main>
   );
