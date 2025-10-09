@@ -78,16 +78,18 @@ const ItemInfo = () => {
     })
       .catch(() => dispatchDetails({type: detailsFetchFailure}))
   },[itemId])
-  
+    
   return (
       <main>
           <section>
               <article>
                   <h2>{details.data.title}</h2>
-                  <title>{details.data.title} | JWMovies</title>
+                  <img src={`https://image.tmdb.org/t/p/w200${details.data.poster_path}`} />
+                  <title>{details.data.title + " | JWMovies"}</title>
                   <meta name="description" content={details.data.overview} />
                   <meta property="og:title" content={details.data.title + " | JWMovies"} />
                   <meta property="og:description" content={details.data.overview} />
+                  <p>{details.data.overview}</p>
               </article>
           </section>
       </main>
