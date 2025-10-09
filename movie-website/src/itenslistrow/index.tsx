@@ -108,7 +108,7 @@ const ItensListRow = ({genre_id, row_title}: ItensListRowProps) => {
               onMouseEnter={() => setHoveredMovie(movie.id)}
               onMouseLeave={() => setHoveredMovie(null)}
             >
-                    <Link to="/iteminfo" >
+                    <Link to={`/${movie.id}`}>
                         <img
                             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                             alt={movie.title}
