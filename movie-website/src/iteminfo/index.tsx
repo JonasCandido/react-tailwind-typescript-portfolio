@@ -3,7 +3,7 @@ import { useReducer, useEffect } from "react";
 import { useParams } from "react-router";
 
 interface ItemInfoState {
-  data: any[];
+  data: any;
   isLoading: boolean;
   isError: boolean;
 }
@@ -28,6 +28,7 @@ const videosFetchInit = "VIDEOS_FETCH_INIT";
 const videosFetchSuccess = "VIDEOS_FETCH_SUCCESS";
 const videosFetchFailure = "VIDEOS_FETCH_FAILURE";
 
+// Reducers
 const detailsReducer = (state: ItemInfoState, action: ItemInfoAction) => {
   switch (action.type) {
     case detailsFetchInit:
@@ -70,7 +71,7 @@ const videosReducer = (state: ItemInfoState, action: ItemInfoAction) => {
 const ItemInfo = () => {
   const { itemId } = useParams();
   const [details, dispatchDetails] = useReducer(detailsReducer, {
-    data: "",
+    data: {},
     isLoading: false,
     isError: false,
   });
@@ -84,9 +85,7 @@ const ItemInfo = () => {
     dispatchDetails({ type: detailsFetchInit });
     axios
       .get(`${BASE_QUERY}${itemId}?api_key=${api_key}`)
-      .then((result) => {
-        dispatchDetails({ type: detailsFetchSuccess, payload: result.data });
-      })
+      .then((result) => dispatchDetails({ type: detailsFetchSuccess, payload: result.data }))
       .catch(() => dispatchDetails({ type: detailsFetchFailure }));
   }, [itemId]);
 
@@ -94,11 +93,9 @@ const ItemInfo = () => {
     dispatchVideos({ type: videosFetchInit });
     axios
       .get(`${BASE_QUERY}${itemId}/videos?api_key=${api_key}`)
-      .then((result) => {
-        dispatchVideos({ type: videosFetchSuccess, payload: result.data });
-      })
+      .then((result) => dispatchVideos({ type: videosFetchSuccess, payload: result.data }))
       .catch(() => dispatchVideos({ type: videosFetchFailure }));
-  }, []);
+  }, [itemId]);
 
   return (
     <main className="max-w-[1600px] m-auto mt-10 p-4">
@@ -107,11 +104,13 @@ const ItemInfo = () => {
           <div className="flex flex-col md:flex-row gap-6 w-full items-center">
             <div className="text-center md:text-left">
               <h2 className="text-2xl font-bold">{details.data.title}</h2>
-              <img
-                className="rounded mt-2 h-[400px] mx-auto md:mx-0"
-                src={`https://image.tmdb.org/t/p/w200${details.data.poster_path}`}
-                alt={details.data.title}
-              />
+              {details.data.poster_path && (
+                <img
+                  className="rounded mt-2 h-[400px] mx-auto md:mx-0"
+                  src={`https://image.tmdb.org/t/p/w200${details.data.poster_path}`}
+                  alt={details.data.title}
+                />
+              )}
             </div>
 
             {videos.data.results.length > 0 && (
@@ -127,22 +126,19 @@ const ItemInfo = () => {
 
           <title>{details.data.title + " | JWMovies"}</title>
           <meta name="description" content={details.data.overview} />
-          <meta
-            property="og:title"
-            content={details.data.title + " | JWMovies"}
-          />
+          <meta property="og:title" content={details.data.title + " | JWMovies"} />
           <meta property="og:description" content={details.data.overview} />
 
-          <div className="w-full flex flex-col md:flex-row items-start justify-between gap-6">
+          <div className="w-full flex flex-col gap-6">
             <section className="md:max-w-[60ch]">
               <h3 className="mt-4 font-semibold">Overview</h3>
               <p className="mt-2">{details.data.overview}</p>
             </section>
 
-            <div className="flex flex-col md:flex-row md:items-start md:gap-10 w-full md:w-auto">
+            <div className="flex flex-col gap-6 w-full">
               <Credits itemId={itemId} />
 
-              <div className="flex flex-col mt-4 md:mt-0">
+              <div className="flex flex-col gap-4">
                 <section>
                   <h3 className="mt-4 font-semibold">Runtime</h3>
                   <p>{details.data.runtime} minutes</p>
@@ -151,9 +147,7 @@ const ItemInfo = () => {
                 <section>
                   <h3 className="mt-4 font-semibold">Genres</h3>
                   <p>
-                    {details.data?.genres
-                      ?.map((genre: any) => genre.name)
-                      .join(", ")}
+                    {details.data?.genres?.map((genre: any) => genre.name).join(", ")}
                   </p>
                 </section>
               </div>
@@ -182,20 +176,18 @@ const Credits = ({ itemId }: CreditsProps) => {
 
     axios
       .get(`${BASE_QUERY}${itemId}/credits?api_key=${api_key}`)
-      .then((result) => {
-        dispatchCredits({ type: creditsFetchSuccess, payload: result.data });
-      })
+      .then((result) => dispatchCredits({ type: creditsFetchSuccess, payload: result.data }))
       .catch(() => dispatchCredits({ type: creditsFetchFailure }));
-  }, []);
+  }, [itemId]);
 
   return (
-    <section className="mx-0 md:mx-10 mt-4 md:mt-0">
+    <section className="w-full">
       <h3 className="mt-4 font-semibold">Cast</h3>
 
       {!credits.isLoading && credits.data?.cast?.length > 0 && (
-        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 text-sm">
-          {credits.data.cast.slice(0, 10).map((actor: any) => (
-            <li key={actor.id} className="flex flex-col">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+          {credits.data.cast.slice(0, 8).map((actor: any) => (
+            <li key={actor.id} className="flex flex-col break-words min-w-0">
               <span className="font-medium">{actor.name}</span>
               <span className="text-xs">{actor.character}</span>
             </li>
