@@ -6,8 +6,8 @@ import checker from 'vite-plugin-checker'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), checker({ typescript: true }),],
-  test: {
-    enviroment: 'jsdom',
-    setupFiles: '.tests/setup.js',
+  test: {    
+    environment: 'jsdom',
+    setupFiles: 'tests/setup.ts',
   },
 })
